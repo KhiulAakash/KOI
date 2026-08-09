@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery | Anchorline Logistics</title>
+  <meta name="description" content="Photos and video from the Anchorline network: terminal, warehouse, line-haul and last mile.">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="img/logo.svg" alt="" width="34" height="34">
+        Anchorline <span>Logistics</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="track.html">Track</a></li>
+          <li><a href="gallery.html" aria-current="page">Gallery</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <p class="eyebrow">Anchorline Logistics</p>
+        <h1>Gallery</h1>
+        <p>The network in pictures, plus a short loop of a consignment crossing the country.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">Motion</p>
+        <h2>One consignment, Sydney to Perth</h2>
+        <p class="lede">An eight second loop of waybill ANC-4471-QLD moving through the
+           national line-haul network. No sound, so it will not surprise anyone.</p>
+        <figure class="media-figure mt-4">
+          <video controls muted loop playsinline preload="none"
+                 poster="media/network-poster.jpg" width="1280" height="720">
+            <source src="media/network-loop.mp4" type="video/mp4">
+            <p>Your browser cannot play this video.
+               <a href="media/network-loop.mp4">Download the MP4 instead</a>.</p>
+          </video>
+          <figcaption>Animated route map showing depot nodes and the active line-haul leg.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section--tight">
+      <div class="wrap">
+        <p class="eyebrow">Stills</p>
+        <h2>Select a thumbnail to open it larger</h2>
+        <p class="lede">Use the arrow keys to move between images and Escape to close.</p>
+        <ul class="gallery mt-4" id="gallery">
+          <li>
+            <button type="button" data-caption="Port Botany terminal, night shift">
+              <img src="img/port-terminal.svg" data-full="img/port-terminal.svg" width="800" height="600" loading="lazy" alt="Gantry cranes lifting containers at a night-time terminal">
+              <span class="caption">Port Botany terminal, night shift</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-caption="Botany distribution centre, aisle 4">
+              <img src="img/warehouse-racking.svg" data-full="img/warehouse-racking.svg" width="800" height="600" loading="lazy" alt="Three levels of warehouse racking loaded with pallets">
+              <span class="caption">Botany distribution centre, aisle 4</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-caption="Line-haul B214 departing Chullora">
+              <img src="img/line-haul.svg" data-full="img/line-haul.svg" width="800" height="600" loading="lazy" alt="Line-haul truck and trailer on a highway at dusk">
+              <span class="caption">Line-haul B214 departing Chullora</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-caption="Chamber 02 at 4.1 degrees">
+              <img src="img/cold-chain.svg" data-full="img/cold-chain.svg" width="800" height="600" loading="lazy" alt="Cold chamber with wrapped pallets and a temperature readout">
+              <span class="caption">Chamber 02 at 4.1 degrees</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-caption="Dispatch desk, Port Botany">
+              <img src="img/control-room.svg" data-full="img/control-room.svg" width="800" height="600" loading="lazy" alt="Dispatch screens showing charts and a route map">
+              <span class="caption">Dispatch desk, Port Botany</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-caption="Air uplift, Sydney apron">
+              <img src="img/air-freight.svg" data-full="img/air-freight.svg" width="800" height="600" loading="lazy" alt="Freight aircraft loading on the apron at dawn">
+              <span class="caption">Air uplift, Sydney apron</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-caption="Last mile, inner west run">
+              <img src="img/last-mile.svg" data-full="img/last-mile.svg" width="800" height="600" loading="lazy" alt="Delivery van on a suburban street">
+              <span class="caption">Last mile, inner west run</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" data-caption="Manifest check before load-out">
+              <img src="img/dock-crew.svg" data-full="img/dock-crew.svg" width="800" height="600" loading="lazy" alt="Two dock workers in high visibility gear checking a manifest">
+              <span class="caption">Manifest check before load-out</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true"
+         aria-label="Enlarged gallery image" hidden>
+      <button class="lightbox-close" type="button">Close &times;</button>
+      <button class="lightbox-nav" type="button" data-dir="prev" aria-label="Previous image">&#8249;</button>
+      <button class="lightbox-nav" type="button" data-dir="next" aria-label="Next image">&#8250;</button>
+      <figure>
+        <img src="img/port-terminal.svg" alt="">
+        <figcaption></figcaption>
+      </figure>
+      <p class="sr-only" id="lightbox-counter" aria-live="polite"></p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <section>
+          <h2>Anchorline Logistics</h2>
+          <p>Freight forwarding, warehousing and last-mile delivery from our Port Botany
+             base, with depots in five states.</p>
+          <p>14 Foreshore Road, Port Botany NSW 2036</p>
+        </section>
+        <section>
+          <h2>Pages</h2>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="track.html">Track a shipment</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </section>
+        <section>
+          <h2>Operations desk</h2>
+          <ul>
+            <li><a href="tel:+61280000000">(02) 8000 0000</a></li>
+            <li><a href="mailto:dispatch@anchorline.example">dispatch@anchorline.example</a></li>
+            <li>Monday to Friday, 6am to 8pm AEST</li>
+            <li><a href="contact.html#contact-form">Request a quote</a></li>
+          </ul>
+        </section>
+      </div>
+      <p class="footer-base">
+        <span>&copy; <span id="year">2026</span> Anchorline Logistics &mdash; student project, not a real company</span>
+        <span>ICT726 Assignment 3 &middot; King's Own Institute</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

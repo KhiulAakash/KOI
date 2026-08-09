@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Track a shipment | Anchorline Logistics</title>
+  <meta name="description" content="Enter an Anchorline waybill number to see shipment status and scan history.">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="img/logo.svg" alt="" width="34" height="34">
+        Anchorline <span>Logistics</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="track.html" aria-current="page">Track</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <p class="eyebrow">Anchorline Logistics</p>
+        <h1>Track a shipment</h1>
+        <p>Enter a waybill number to see where a consignment is and every scan behind it.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap split">
+        <div>
+          <form class="form" id="track-form" novalidate>
+            <fieldset>
+              <legend>Shipment lookup</legend>
+              <div class="field">
+                <label for="waybill">Waybill number</label>
+                <span class="hint" id="waybill-hint">Format ANC-0000-STATE. It is printed
+                  on the top right of your consignment note.</span>
+                <input type="text" id="waybill" name="waybill" placeholder="ANC-4471-QLD"
+                       autocomplete="off" aria-describedby="waybill-hint" required>
+              </div>
+              <button class="btn btn--primary" type="submit">Track shipment</button>
+            </fieldset>
+          </form>
+
+          <p class="feedback feedback--error" id="track-feedback" role="alert" hidden></p>
+
+          <h2 class="mt-4 h-sub">Sample waybills</h2>
+          <p>This is a prototype without a live database, so three sample consignments are
+             built in. Try:</p>
+          <ul>
+            <li><code>ANC-4471-QLD</code> &mdash; in transit</li>
+            <li><code>ANC-7726-VIC</code> &mdash; delivered, cold chain</li>
+            <li><code>ANC-1039-WA</code> &mdash; held at depot</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="tracker" id="track-result" role="region"
+               aria-live="polite" aria-label="Tracking result" hidden></div>
+          <figure class="media-figure">
+            <img src="img/control-room.svg" width="800" height="600"
+                 alt="Dispatch screens showing shipment volumes and a national route map">
+            <figcaption>Scans from every depot write to one record.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark section--tight">
+      <div class="wrap">
+        <h2>Cannot find a consignment?</h2>
+        <p class="lede">Waybill numbers activate about fifteen minutes after pickup. If the
+           number still returns nothing after an hour, the operations desk can trace it
+           against the driver run sheet.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="contact.html">Contact the operations desk</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <section>
+          <h2>Anchorline Logistics</h2>
+          <p>Freight forwarding, warehousing and last-mile delivery from our Port Botany
+             base, with depots in five states.</p>
+          <p>14 Foreshore Road, Port Botany NSW 2036</p>
+        </section>
+        <section>
+          <h2>Pages</h2>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="track.html">Track a shipment</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </section>
+        <section>
+          <h2>Operations desk</h2>
+          <ul>
+            <li><a href="tel:+61280000000">(02) 8000 0000</a></li>
+            <li><a href="mailto:dispatch@anchorline.example">dispatch@anchorline.example</a></li>
+            <li>Monday to Friday, 6am to 8pm AEST</li>
+            <li><a href="contact.html#contact-form">Request a quote</a></li>
+          </ul>
+        </section>
+      </div>
+      <p class="footer-base">
+        <span>&copy; <span id="year">2026</span> Anchorline Logistics &mdash; student project, not a real company</span>
+        <span>ICT726 Assignment 3 &middot; King's Own Institute</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
