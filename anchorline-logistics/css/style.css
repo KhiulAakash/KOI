@@ -4,6 +4,7 @@
    Sections: 1 Tokens  2 Base  3 Layout  4 Header/Nav  5 Hero
              6 Components  7 Page blocks  8 Forms  9 Gallery
              10 Footer  11 Responsive  12 Motion/print
+             13 Dynamic app components (dashboard, admin, badges)
    ============================================================= */
 
 /* -------------------------------------------------------------
@@ -235,10 +236,16 @@ img, video { max-width: 100%; height: auto; display: block; }
 
 .site-nav ul {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: var(--space-1);
   list-style: none;
   margin: 0;
   padding: 0;
+}
+.nav-auth-item { margin-left: 0.4rem; padding-left: 0.8rem; border-left: 1px solid rgba(255, 255, 255, 0.2); }
+@media (max-width: 720px) {
+  .nav-auth-item { margin-left: 0; padding-left: 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.12); }
 }
 .site-nav a {
   display: block;
@@ -796,6 +803,60 @@ table.manifest {
   font-size: 0.74rem;
   letter-spacing: 0.08em;
   color: rgba(239, 242, 240, 0.6);
+}
+
+/* -------------------------------------------------------------
+   13. DYNAMIC APP COMPONENTS (dashboard, admin, badges)
+   ------------------------------------------------------------- */
+.badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(90, 110, 113, 0.16);
+  color: var(--steel);
+}
+.badge--booked     { background: rgba(90, 110, 113, 0.16); color: var(--steel); }
+.badge--collected  { background: rgba(31, 122, 140, 0.14); color: var(--lane); }
+.badge--in_transit { background: rgba(255, 194, 51, 0.25); color: #7a5300; }
+.badge--held       { background: rgba(168, 50, 31, 0.12); color: var(--alert); }
+.badge--delivered  { background: rgba(31, 107, 77, 0.12); color: var(--ok); }
+.badge--new         { background: rgba(255, 194, 51, 0.25); color: #7a5300; }
+.badge--contacted   { background: rgba(31, 122, 140, 0.14); color: var(--lane); }
+.badge--closed      { background: rgba(31, 107, 77, 0.12); color: var(--ok); }
+.badge--admin  { background: rgba(168, 50, 31, 0.12); color: var(--alert); }
+.badge--member { background: rgba(31, 122, 140, 0.14); color: var(--lane); }
+.badge--normal { background: rgba(90, 110, 113, 0.16); color: var(--steel); }
+
+.btn--sm { padding: 0.45rem 0.9rem; font-size: 0.85rem; }
+.btn--danger { background: var(--alert); color: var(--white); }
+.btn--danger:hover { background: #8c2a1a; color: var(--white); }
+.actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.actions form { display: inline; }
+
+.dashboard-card {
+  background: var(--white);
+  border: var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+.dashboard-card h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.dashboard-card + .dashboard-card { margin-top: var(--space-3); }
+
+.role-pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius);
+  background: var(--signal);
+  color: var(--ink);
 }
 
 /* -------------------------------------------------------------

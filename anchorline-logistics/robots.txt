@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /member/
+Disallow: /dashboard.php
+Disallow: /login.php
+Disallow: /register.php
+Disallow: /includes/
+Disallow: /sql/
+
+Sitemap: http://localhost/anchorline-logistics/sitemap.xml

@@ -1,67 +1,117 @@
-# Anchorline Logistics — ICT726 Assignment 3
+# Anchorline Logistics
 
-A static website for a fictional Australian freight and logistics operator. Built from
-scratch with HTML5, CSS3 and vanilla JavaScript. No frameworks, no templates, no
-server-side code.
+A dynamic web application for a fictional Australian freight and logistics operator, built
+with PHP, MySQL, HTML5, CSS3 and vanilla JavaScript. Started as a static HTML site (ICT726
+Assignment 3) and rebuilt here with server-side authentication, role-based access control,
+and two database-backed CRUD workflows.
+
+## Stack
+
+- **PHP** (PDO + prepared statements, session-based auth) — tested against XAMPP's bundled PHP
+- **MySQL** — schema and seed data in `sql/schema.sql`
+- HTML5, CSS3, vanilla JavaScript (progressive enhancement — every form works without JS)
+
+## Key functionality
+
+- **Auth & roles.** Register / log in / log out. Three roles — `admin`, `member`, `normal` —
+  enforced on the server (`includes/auth.php`) on every protected page, not just hidden in
+  the UI. Passwords are hashed with `password_hash()` / `password_verify()`.
+- **Shipments (CRUD).** `admin/consignments.php` — admins create, edit and delete consignment
+  records. `member/scan.php` — staff (member or admin) add scan events, which advance a
+  consignment's status. `track.php` is the public, database-backed lookup (replaces the old
+  hardcoded JS demo data).
+- **Enquiries (CRUD).** `contact.php` inserts real rows into `enquiries`; `admin/enquiries.php`
+  lets admins review them and update status; logged-in customers see their own on
+  `dashboard.php`.
+- **Security.** PDO prepared statements everywhere, CSRF tokens on every state-changing form,
+  server-side validation mirrored (not replaced) by client-side JS, `HttpOnly` session
+  cookies, generic login-failure messages.
+- **Accessibility / SEO / privacy** carried over and extended from the static build — see
+  `includes/header.php` for canonical/OG tags and JSON-LD, `privacy.php` for the privacy
+  notice, `robots.txt` / `sitemap.xml`.
 
 ## Files
 
 ```
-index.html          Home
-services.html       Services detail + service level table
-track.html          Shipment tracking prototype (JS lookup + validation)
-gallery.html        Media page: video + thumbnail gallery with lightbox
-about.html          Company story and timeline
-contact.html        Contact details + validated enquiry form
-css/style.css       Single external stylesheet (assignment allows a max of 2)
-js/main.js          Nav, lightbox, tracker, form validation
-img/*.svg           Nine self-created SVG illustrations
-media/              Self-generated MP4 loop + JPG poster frame
+config.php              App bootstrap: constants, session, requires includes/*
+includes/db.php          PDO connection
+includes/auth.php        Session auth + role gate (require_login, require_role) + CSRF
+includes/functions.php   e(), flash messages, validators, enum label maps
+includes/header.php      Shared <head> + session-aware nav
+includes/footer.php      Shared footer + closing tags
+
+index.php, services.php, gallery.php, about.php   Static-content pages
+track.php                 Public shipment tracker (DB lookup)
+contact.php                Public enquiry form -> enquiries table
+privacy.php                 Privacy notice
+register.php / login.php / logout.php   Auth
+dashboard.php               Role-aware landing page after login
+admin/consignments.php      Admin: consignment CRUD
+admin/enquiries.php         Admin: enquiry status management
+admin/users.php             Admin: user role management
+member/scan.php              Member/admin: add a scan event
+
+sql/schema.sql   Table definitions + seed data (2 users, 3 sample consignments/scans)
+css/style.css, js/main.js   Shared styling/behaviour (extended, not replaced, from the static build)
+img/*.svg, media/*   Original SVG illustrations + generated video loop
+robots.txt, sitemap.xml   SEO
 ```
 
-## Running it locally
+## Running it locally (XAMPP)
 
-Open `index.html` in a browser. Everything is client-side, so no build step or server is
-needed. (If you prefer a local server: `python3 -m http.server` inside this folder.)
+1. Install/start [XAMPP](https://www.apachefriends.org/) (Apache + MySQL + PHP).
+2. Serve this folder from `htdocs`. Either copy it in, or link it so the git repo stays the
+   single source of truth:
+   ```
+   mklink /J "C:\xampp\htdocs\anchorline-logistics" "<path to this repo>"
+   ```
+3. Create the database and import the schema:
+   ```
+   C:\xampp\mysql\bin\mysql.exe -u root -e "CREATE DATABASE anchorline CHARACTER SET utf8mb4;"
+   C:\xampp\mysql\bin\mysql.exe -u root anchorline < sql\schema.sql
+   ```
+4. Start Apache and MySQL from the XAMPP control panel (or `apache_start.bat` /
+   `mysql_start.bat`).
+5. Open `http://localhost/anchorline-logistics/index.php`.
 
-## Publishing to GitHub Pages
+If your XAMPP `htdocs` folder name or DB credentials differ, edit `BASE_URL` / `DB_*` in
+`config.php`.
 
-1. Create a public repo, e.g. `anchorline-logistics`.
-2. Upload every file in this folder, keeping the folder structure. `index.html` must sit at
-   the repository root.
-3. Repo → **Settings** → **Pages** → Source: *Deploy from a branch* → Branch: `main`,
-   folder `/ (root)` → **Save**.
-4. Wait about a minute, then open `https://<your-username>.github.io/anchorline-logistics/`.
-5. Paste that link into Moodle and into section 1 of your report.
+### Demo accounts (from the seed data)
 
-Netlify alternative: drag this folder onto <https://app.netlify.com/drop>.
+| Role | Email | Password |
+|---|---|---|
+| admin | `admin@anchorline.example` | `Admin@12345` |
+| member | `member@anchorline.example` | `Member@12345` |
 
-## Assignment requirements → where they are met
+Register a new account to see the `normal` role. Change or remove these before this ever
+leaves a local dev machine.
+
+### Sample waybills
+
+`ANC-4471-QLD`, `ANC-7726-VIC`, `ANC-1039-WA` — seeded with scan history, usable immediately
+on `track.php`.
+
+## Assignment requirements -> where they are met
 
 | Requirement | Where |
 |---|---|
-| `index.html` homepage, business name, 20–50 word paragraph | `index.html` hero (34 words) |
-| Three or more additional pages | services, track, gallery, about (4) |
-| Contact page with styled `<form>`, HTML5 + JS validation, error and success feedback | `contact.html` + `initContactForm()` |
-| Media page with interactive thumbnails opening larger versions | `gallery.html` + `initLightbox()` |
-| At least three pieces of media | 9 SVG images, 1 MP4 video, 1 JPG poster |
-| Header with logo/banner | `.site-header` on every page |
-| Consistent navigation | shared `<nav>` with `aria-current="page"` |
-| Footer | `.site-footer` on every page |
-| HTML5 semantic tags, minimal `<div>` | `header/nav/main/section/article/figure/footer` |
-| Max 2 external stylesheets | 1 (`css/style.css`) |
-| Three or more CSS3 features | transitions, transforms, rounded corners, shadows, gradients, opacity (6) |
-| Media queries / responsive | four breakpoints: 900px, 720px, 520px + `prefers-reduced-motion` |
-| Alt attributes | every `<img>`; decorative logo uses `alt=""` |
-| ARIA | `aria-current`, `aria-expanded`, `aria-controls`, `aria-live`, `aria-invalid`, `aria-describedby`, `role="dialog"`, `aria-modal`, `role="alert"`, skip link |
-| Contrast | palette checked against WCAG AA (see report) |
-| Hosting | GitHub Pages, steps above |
+| User registration, login, logout | `register.php`, `login.php`, `logout.php` |
+| Role-based access (admin / member / normal) | `includes/auth.php` `require_role()`, enforced on every `admin/`/`member/` page |
+| Secure password storage | `password_hash()` / `password_verify()` in `register.php`, `login.php` |
+| Database schema with relationships | `sql/schema.sql` — `users` 1→N `consignments`, `consignments` 1→N `scan_events`, `users` 1→N `enquiries` |
+| PHP + MySQL CRUD | `admin/consignments.php` (create/read/update/delete), `member/scan.php` (create), `admin/enquiries.php` (read/update) |
+| Two validated data-input forms | `contact.php` (enquiries), `register.php`/`admin/consignments.php` (accounts/shipments) — all server- and client-validated |
+| Semantic HTML5, ARIA, responsive, media | Carried over from the static build; see `css/style.css` sections 4/11 |
+| SEO: titles, meta, canonical, OG, structured data, sitemap | `includes/header.php`, `robots.txt`, `sitemap.xml` |
+| Privacy notice, secure data handling | `privacy.php`; prepared statements + CSRF throughout |
 
 ## Before you submit
 
-- [ ] Replace "Anchorline Logistics" if your tutor assigned a specific business name.
-- [ ] Put your name and student ID in the footer and in the CSS header comment.
-- [ ] Take screenshots of every page (desktop + mobile) for the report.
-- [ ] Run the site through <https://validator.w3.org/> and <https://wave.webaim.org/>.
-- [ ] Publish, test the live link in a private window, paste it into Moodle.
-- [ ] Complete and submit `REPORT-DRAFT.md` as a Word document.
+- [ ] Change the seeded demo passwords (or note in your report that this is a teaching
+      environment).
+- [ ] Take fresh screenshots of every role's view for the report.
+- [ ] Run the site through the W3C HTML validator and WAVE (validators can't reach a
+      localhost site directly — either deploy to a public PHP/MySQL host first, or save a
+      rendered page and upload it).
+- [ ] Update `REPORT-DRAFT.md` for this assignment's report requirements.

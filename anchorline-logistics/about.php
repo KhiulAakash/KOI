@@ -1,40 +1,9 @@
-<!DOCTYPE html>
-<html lang="en-AU">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>About us | Anchorline Logistics</title>
-  <meta name="description" content="How Anchorline Logistics grew from two trucks at Port Botany to a national line-haul network.">
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to main content</a>
-
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <img src="img/logo.svg" alt="" width="34" height="34">
-        Anchorline <span>Logistics</span>
-      </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-      <nav class="site-nav" id="site-nav" aria-label="Main">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="track.html">Track</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="about.html" aria-current="page">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main">
+<?php
+require_once __DIR__ . '/config.php';
+$page_title = 'About us';
+$meta_description = 'How Anchorline Logistics grew from two trucks at Port Botany to a national line-haul network.';
+require ROOT_PATH . '/includes/header.php';
+?>
     <section class="page-head">
       <div class="wrap">
         <p class="eyebrow">Anchorline Logistics</p>
@@ -57,7 +26,7 @@
              minute, we have not finished the job.</p>
         </div>
         <figure class="media-figure">
-          <img src="img/dock-crew.svg" width="800" height="600"
+          <img src="<?php echo e(BASE_URL); ?>/img/dock-crew.svg" width="800" height="600"
                alt="Two dock workers in high visibility gear checking a consignment manifest">
           <figcaption>Manifest check before load-out, Port Botany.</figcaption>
         </figure>
@@ -121,45 +90,4 @@
         </dl>
       </div>
     </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap">
-      <div>
-        <section>
-          <h2>Anchorline Logistics</h2>
-          <p>Freight forwarding, warehousing and last-mile delivery from our Port Botany
-             base, with depots in five states.</p>
-          <p>14 Foreshore Road, Port Botany NSW 2036</p>
-        </section>
-        <section>
-          <h2>Pages</h2>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="track.html">Track a shipment</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="about.html">About us</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </section>
-        <section>
-          <h2>Operations desk</h2>
-          <ul>
-            <li><a href="tel:+61280000000">(02) 8000 0000</a></li>
-            <li><a href="mailto:dispatch@anchorline.example">dispatch@anchorline.example</a></li>
-            <li>Monday to Friday, 6am to 8pm AEST</li>
-            <li><a href="contact.html#contact-form">Request a quote</a></li>
-          </ul>
-        </section>
-      </div>
-      <p class="footer-base">
-        <span>&copy; <span id="year">2026</span> Anchorline Logistics &mdash; student project, not a real company</span>
-        <span>ICT726 Assignment 3 &middot; King's Own Institute</span>
-      </p>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
-</body>
-</html>
+<?php require ROOT_PATH . '/includes/footer.php'; ?>

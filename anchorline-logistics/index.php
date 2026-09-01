@@ -1,40 +1,30 @@
-<!DOCTYPE html>
-<html lang="en-AU">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home | Anchorline Logistics</title>
-  <meta name="description" content="Anchorline Logistics moves palletised, refrigerated and containerised freight across Australia from a Port Botany base.">
-  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to main content</a>
+<?php
+require_once __DIR__ . '/config.php';
 
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <img src="img/logo.svg" alt="" width="34" height="34">
-        Anchorline <span>Logistics</span>
-      </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-      <nav class="site-nav" id="site-nav" aria-label="Main">
-        <ul>
-          <li><a href="index.html" aria-current="page">Home</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="track.html">Track</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+$page_title = 'Home';
+$meta_description = 'Anchorline Logistics moves palletised, refrigerated and containerised freight across Australia from a Port Botany base.';
+$structured_data = json_encode([
+    '@context'  => 'https://schema.org',
+    '@type'     => 'LocalBusiness',
+    'name'      => 'Anchorline Logistics',
+    'image'     => SITE_URL . '/img/port-terminal.svg',
+    'telephone' => '+61280000000',
+    'email'     => 'dispatch@anchorline.example',
+    'address'   => [
+        '@type'           => 'PostalAddress',
+        'streetAddress'   => '14 Foreshore Road',
+        'addressLocality' => 'Port Botany',
+        'addressRegion'   => 'NSW',
+        'postalCode'      => '2036',
+        'addressCountry'  => 'AU',
+    ],
+    'openingHours' => 'Mo-Fr 06:00-20:00',
+    'url'          => SITE_URL,
+    'description'  => 'Freight forwarding, warehousing, cold chain and international freight from Port Botany, NSW.',
+], JSON_UNESCAPED_SLASHES);
 
-  <main id="main">
+require ROOT_PATH . '/includes/header.php';
+?>
     <section class="hero">
       <div class="wrap">
         <div>
@@ -44,12 +34,12 @@
              across Australia. We handle the forwarding, the warehouse, the paperwork and the
              final doorstep, and we show you exactly where the load is at every step.</p>
           <div class="btn-row">
-            <a class="btn btn--primary" href="track.html">Track a shipment</a>
-            <a class="btn btn--ghost" href="services.html">See what we move</a>
+            <a class="btn btn--primary" href="<?php echo e(BASE_URL); ?>/track.php">Track a shipment</a>
+            <a class="btn btn--ghost" href="<?php echo e(BASE_URL); ?>/services.php">See what we move</a>
           </div>
         </div>
         <figure class="hero-figure media-figure">
-          <img src="img/port-terminal.svg" width="800" height="600"
+          <img src="<?php echo e(BASE_URL); ?>/img/port-terminal.svg" width="800" height="600"
                alt="Illustration of gantry cranes lifting shipping containers at a night-time terminal">
         </figure>
       </div>
@@ -76,7 +66,7 @@
            without changing providers.</p>
         <div class="grid grid--3 mt-4">
           <article class="card">
-            <img src="img/line-haul.svg" width="800" height="600"
+            <img src="<?php echo e(BASE_URL); ?>/img/line-haul.svg" width="800" height="600"
                  alt="Line-haul truck travelling a highway at dusk">
             <span class="tag">Road freight</span>
             <h3>Line-haul and palletised</h3>
@@ -84,7 +74,7 @@
                both ends.</p>
           </article>
           <article class="card">
-            <img src="img/warehouse-racking.svg" width="800" height="600"
+            <img src="<?php echo e(BASE_URL); ?>/img/warehouse-racking.svg" width="800" height="600"
                  alt="Warehouse racking stacked with palletised freight">
             <span class="tag">Warehousing</span>
             <h3>Storage and 3PL</h3>
@@ -92,7 +82,7 @@
                your stock file.</p>
           </article>
           <article class="card">
-            <img src="img/cold-chain.svg" width="800" height="600"
+            <img src="<?php echo e(BASE_URL); ?>/img/cold-chain.svg" width="800" height="600"
                  alt="Temperature controlled freight chamber holding wrapped pallets">
             <span class="tag">Cold chain</span>
             <h3>Chilled and frozen</h3>
@@ -123,11 +113,11 @@
               Proof of delivery is captured and attached to the record.</li>
           </ol>
           <div class="btn-row">
-            <a class="btn btn--primary" href="track.html">Try the tracker</a>
+            <a class="btn btn--primary" href="<?php echo e(BASE_URL); ?>/track.php">Try the tracker</a>
           </div>
         </div>
         <figure class="media-figure">
-          <img src="img/control-room.svg" width="800" height="600"
+          <img src="<?php echo e(BASE_URL); ?>/img/control-room.svg" width="800" height="600"
                alt="Dispatch control room screens showing volumes, trends and a national route map">
           <figcaption>Dispatch, Port Botany. Every leg on one board.</figcaption>
         </figure>
@@ -155,50 +145,9 @@
         <p class="lede">Send us the route, the pallet count and the service level. Quotes
            come back the same business day.</p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="contact.html">Request a quote</a>
-          <a class="btn btn--ghost" href="services.html">Compare service levels</a>
+          <a class="btn btn--primary" href="<?php echo e(BASE_URL); ?>/contact.php">Request a quote</a>
+          <a class="btn btn--ghost" href="<?php echo e(BASE_URL); ?>/services.php">Compare service levels</a>
         </div>
       </div>
     </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap">
-      <div>
-        <section>
-          <h2>Anchorline Logistics</h2>
-          <p>Freight forwarding, warehousing and last-mile delivery from our Port Botany
-             base, with depots in five states.</p>
-          <p>14 Foreshore Road, Port Botany NSW 2036</p>
-        </section>
-        <section>
-          <h2>Pages</h2>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="track.html">Track a shipment</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="about.html">About us</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </section>
-        <section>
-          <h2>Operations desk</h2>
-          <ul>
-            <li><a href="tel:+61280000000">(02) 8000 0000</a></li>
-            <li><a href="mailto:dispatch@anchorline.example">dispatch@anchorline.example</a></li>
-            <li>Monday to Friday, 6am to 8pm AEST</li>
-            <li><a href="contact.html#contact-form">Request a quote</a></li>
-          </ul>
-        </section>
-      </div>
-      <p class="footer-base">
-        <span>&copy; <span id="year">2026</span> Anchorline Logistics &mdash; student project, not a real company</span>
-        <span>ICT726 Assignment 3 &middot; King's Own Institute</span>
-      </p>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
-</body>
-</html>
+<?php require ROOT_PATH . '/includes/footer.php'; ?>

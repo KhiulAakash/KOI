@@ -1,7 +1,10 @@
 /* =============================================================
    Anchorline Logistics - main.js
-   All behaviour is client-side only (no server, no PHP).
-   Modules run only if their markup exists on the current page.
+   Progressive enhancement on top of the PHP/MySQL backend: every
+   form here works without JavaScript (a real GET/POST to a PHP
+   page that validates and persists it); this file only adds
+   instant, accessible inline validation feedback before that
+   round-trip. Modules run only if their markup exists on the page.
    ============================================================= */
 (function () {
   "use strict";
@@ -96,186 +99,113 @@
   }
 
   /* -----------------------------------------------------------
-     3. SHIPMENT TRACKING (prototype)
-     A static sample dataset stands in for the server-side
-     database, which a static site cannot query.
+     3. SHIPMENT TRACKING
+     track.php does the real lookup server-side (it queries
+     MySQL and renders the result panel in the page HTML). This
+     only adds an accessible client-side format check so a typo
+     is caught before the page round-trips to the server.
      ----------------------------------------------------------- */
-  var SHIPMENTS = {
-    "ANC-4471-QLD": {
-      status: "In transit",
-      state: "transit",
-      service: "Road freight - palletised",
-      origin: "Port Botany, NSW",
-      destination: "Eagle Farm, QLD",
-      eta: "19 Jul 2026, 14:00 AEST",
-      events: [
-        { time: "16 Jul, 08:12", text: "Collected from consignor, Port Botany", done: true },
-        { time: "16 Jul, 19:40", text: "Scanned into Chullora sortation hub", done: true },
-        { time: "17 Jul, 06:05", text: "Departed Chullora on line-haul B214", done: true },
-        { time: "18 Jul, 05:30", text: "Arrived Coffs Harbour changeover depot", current: true },
-        { time: "Scheduled", text: "Out for delivery, Eagle Farm" }
-      ]
-    },
-    "ANC-7726-VIC": {
-      status: "Delivered",
-      state: "done",
-      service: "Cold chain - 2 to 8 degrees C",
-      origin: "Alexandria, NSW",
-      destination: "Dandenong South, VIC",
-      eta: "Delivered 15 Jul 2026, 11:22 AEST",
-      events: [
-        { time: "14 Jul, 07:50", text: "Collected from consignor, Alexandria", done: true },
-        { time: "14 Jul, 15:10", text: "Temperature check passed at 4.1 degrees C", done: true },
-        { time: "15 Jul, 06:44", text: "Arrived Dandenong South depot", done: true },
-        { time: "15 Jul, 11:22", text: "Delivered, signed by R. Okafor", done: true }
-      ]
-    },
-    "ANC-1039-WA": {
-      status: "Held at depot",
-      state: "transit",
-      service: "Sea freight - LCL container",
-      origin: "Port Botany, NSW",
-      destination: "Fremantle, WA",
-      eta: "Awaiting customs release",
-      events: [
-        { time: "02 Jul, 09:00", text: "Container loaded, vessel MV Corella", done: true },
-        { time: "11 Jul, 16:30", text: "Vessel berthed at Fremantle", done: true },
-        { time: "12 Jul, 10:15", text: "Held for customs inspection", current: true },
-        { time: "Pending", text: "Release and final delivery" }
-      ]
-    }
-  };
-
   function initTracker() {
     var form = document.querySelector("#track-form");
     if (!form) return;
 
     var input = document.querySelector("#waybill");
     var feedback = document.querySelector("#track-feedback");
-    var panel = document.querySelector("#track-result");
     var pattern = /^ANC-\d{4}-(NSW|VIC|QLD|WA|SA|TAS|NT|ACT)$/i;
 
     form.addEventListener("submit", function (e) {
-      e.preventDefault();                 // static site: nothing is sent anywhere
-      var ref = input.value.trim().toUpperCase();
-      panel.hidden = true;
-
+      var ref = input.value.trim();
       if (!ref) {
+        e.preventDefault();
         return fail("Enter a waybill number to track a shipment.");
       }
       if (!pattern.test(ref)) {
+        e.preventDefault();
         return fail("Waybill format is ANC-0000-STATE, for example ANC-4471-QLD.");
       }
-      var data = SHIPMENTS[ref];
-      if (!data) {
-        return fail("No shipment found for " + ref + ". Try the sample waybill ANC-4471-QLD.");
-      }
-      render(ref, data);
+      if (feedback) feedback.hidden = true;
+      // Valid format: let the form submit as a normal GET request to the server.
     });
 
     function fail(message) {
+      if (!feedback) return;
       feedback.hidden = false;
       feedback.className = "feedback feedback--error";
       feedback.textContent = message;
       input.focus();
     }
-
-    function render(ref, data) {
-      feedback.hidden = true;
-      panel.innerHTML =
-        '<p class="tracker-ref">' + ref + '</p>' +
-        '<p><span class="tracker-status' +
-          (data.state === "transit" ? " tracker-status--transit" : "") + '">' +
-          data.status + '</span></p>' +
-        '<dl class="stats stats--compact">' +
-        '<div><dt>Service</dt><dd>' + data.service + '</dd></div>' +
-        '<div><dt>Origin</dt><dd>' + data.origin + '</dd></div>' +
-        '<div><dt>Destination</dt><dd>' + data.destination + '</dd></div>' +
-        '<div><dt>ETA</dt><dd>' + data.eta + '</dd></div></dl>' +
-        '<h3 class="mt-4">Scan history</h3>' +
-        '<ol class="rail">' + data.events.map(function (ev) {
-          var cls = ev.current ? "is-current" : (ev.done ? "is-done" : "");
-          return '<li class="' + cls + '"><span class="rail-time">' + ev.time +
-                 '</span><strong>' + ev.text + '</strong></li>';
-        }).join("") + '</ol>';
-      panel.hidden = false;
-    }
   }
 
   /* -----------------------------------------------------------
-     4. CONTACT FORM VALIDATION
-     HTML5 constraints do the first pass; JavaScript adds custom
-     rules, inline messages and an accessible success state.
+     4. GENERIC FORM VALIDATION
+     HTML5 constraints do the first pass; JavaScript adds inline,
+     accessible per-field messages. Any <form data-validate> gets
+     wired automatically. Submission is only blocked when a field
+     is invalid - a valid form submits for real, to a PHP endpoint
+     that re-validates and performs the actual database work.
+     Per-field custom copy comes from data-error-* attributes so
+     one function serves the contact, register, login and admin
+     forms without repeating this logic.
      ----------------------------------------------------------- */
-  function initContactForm() {
-    var form = document.querySelector("#contact-form");
-    if (!form) return;
+  function initValidatedForms() {
+    var forms = Array.prototype.slice.call(document.querySelectorAll("form[data-validate]"));
+    forms.forEach(wireForm);
 
-    var feedback = document.querySelector("#form-feedback");
-    var fields = Array.prototype.slice.call(
-      form.querySelectorAll("input, select, textarea")
-    );
+    function wireForm(form) {
+      var fields = Array.prototype.slice.call(
+        form.querySelectorAll("input, select, textarea")
+      );
+      var feedback = form.querySelector(".form-feedback") ||
+        document.getElementById(form.id + "-feedback");
 
-    var messages = {
-      valueMissing: "This field is required.",
-      typeMismatch: "Enter a valid email address, for example name@example.com.",
-      patternMismatch: "Use a 10-digit Australian number, for example 0412 345 678.",
-      tooShort: "Tell us a little more - at least 20 characters."
-    };
-
-    function messageFor(field) {
-      var v = field.validity;
-      if (v.valueMissing) return messages.valueMissing;
-      if (v.typeMismatch) return messages.typeMismatch;
-      if (v.patternMismatch) return messages.patternMismatch;
-      if (v.tooShort) return messages.tooShort;
-      return field.validationMessage;
-    }
-
-    function setError(field, message) {
-      var wrapper = field.closest(".field") || field.closest(".checkbox");
-      var slot = document.getElementById(field.id + "-error");
-      if (wrapper) wrapper.classList.toggle("is-invalid", Boolean(message));
-      field.setAttribute("aria-invalid", message ? "true" : "false");
-      if (slot) slot.textContent = message || "";
-    }
-
-    fields.forEach(function (field) {
-      field.addEventListener("blur", function () {
-        setError(field, field.checkValidity() ? "" : messageFor(field));
-      });
-      field.addEventListener("input", function () {
-        if (field.checkValidity()) setError(field, "");
-      });
-    });
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();                 // no back end: nothing is transmitted
-      var firstBad = null;
-
-      fields.forEach(function (field) {
-        var ok = field.checkValidity();
-        setError(field, ok ? "" : messageFor(field));
-        if (!ok && !firstBad) firstBad = field;
-      });
-
-      feedback.hidden = false;
-      if (firstBad) {
-        feedback.className = "feedback feedback--error";
-        feedback.textContent = "Check the highlighted fields and send again.";
-        firstBad.focus();
-        return;
+      function messageFor(field) {
+        var v = field.validity;
+        if (v.valueMissing) return field.dataset.errorRequired || "This field is required.";
+        if (v.typeMismatch) return field.dataset.errorType || "Enter a valid value.";
+        if (v.patternMismatch) return field.dataset.errorPattern || "That format is not accepted.";
+        if (v.tooShort) return field.dataset.errorTooshort || "Please add a little more detail.";
+        if (v.tooLong) return field.dataset.errorToolong || "Please shorten your entry.";
+        if (v.rangeUnderflow || v.rangeOverflow) return field.dataset.errorRange || "That value is out of range.";
+        return field.validationMessage;
       }
 
-      var name = document.getElementById("full-name").value.trim().split(" ")[0];
-      feedback.className = "feedback feedback--ok";
-      feedback.textContent = "Thanks " + name +
-        ", your enquiry is logged. A freight coordinator replies within one business day. " +
-        "(Demonstration only - this static site stores and sends nothing.)";
-      form.reset();
-      fields.forEach(function (f) { setError(f, ""); });
-      feedback.focus();
-    });
+      function setError(field, message) {
+        var wrapper = field.closest(".field") || field.closest(".checkbox");
+        var slot = document.getElementById(field.id + "-error");
+        if (wrapper) wrapper.classList.toggle("is-invalid", Boolean(message));
+        field.setAttribute("aria-invalid", message ? "true" : "false");
+        if (slot) slot.textContent = message || "";
+      }
+
+      fields.forEach(function (field) {
+        field.addEventListener("blur", function () {
+          setError(field, field.checkValidity() ? "" : messageFor(field));
+        });
+        field.addEventListener("input", function () {
+          if (field.checkValidity()) setError(field, "");
+        });
+      });
+
+      form.addEventListener("submit", function (e) {
+        var firstBad = null;
+        fields.forEach(function (field) {
+          var ok = field.checkValidity();
+          setError(field, ok ? "" : messageFor(field));
+          if (!ok && !firstBad) firstBad = field;
+        });
+
+        if (firstBad) {
+          e.preventDefault();
+          if (feedback) {
+            feedback.hidden = false;
+            feedback.className = "feedback feedback--error";
+            feedback.textContent = "Check the highlighted fields and try again.";
+          }
+          firstBad.focus();
+        }
+        // Otherwise: let the browser submit the form for real.
+      });
+    }
   }
 
   /* -----------------------------------------------------------
@@ -290,7 +220,7 @@
     initNav();
     initLightbox();
     initTracker();
-    initContactForm();
+    initValidatedForms();
     initYear();
   });
 })();

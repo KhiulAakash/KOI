@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>http://localhost/anchorline-logistics/index.php</loc><priority>1.0</priority></url>
+  <url><loc>http://localhost/anchorline-logistics/services.php</loc><priority>0.8</priority></url>
+  <url><loc>http://localhost/anchorline-logistics/track.php</loc><priority>0.8</priority></url>
+  <url><loc>http://localhost/anchorline-logistics/gallery.php</loc><priority>0.6</priority></url>
+  <url><loc>http://localhost/anchorline-logistics/about.php</loc><priority>0.6</priority></url>
+  <url><loc>http://localhost/anchorline-logistics/contact.php</loc><priority>0.7</priority></url>
+  <url><loc>http://localhost/anchorline-logistics/privacy.php</loc><priority>0.3</priority></url>
+</urlset>
