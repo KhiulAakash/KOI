@@ -914,6 +914,258 @@ table.manifest {
 }
 
 @media print {
-  .site-header, .site-footer, .btn, .lightbox { display: none; }
+  .site-header, .site-footer, .btn, .lightbox, .faqbot { display: none; }
   body { background: #fff; color: #000; }
+}
+
+/* -------------------------------------------------------------
+   14. FAQ CHATBOT WIDGET
+   ------------------------------------------------------------- */
+.faqbot {
+  position: fixed;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 40;
+  font-family: var(--font-body);
+}
+
+.faqbot-toggle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--signal);
+  color: var(--ink);
+  box-shadow: var(--shadow-md);
+  transition: transform 200ms var(--ease), background 160ms var(--ease), box-shadow 200ms var(--ease);
+}
+
+.faqbot-toggle:hover,
+.faqbot-toggle:focus-visible {
+  background: #ffd05c;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.faqbot-toggle-icon { flex: none; position: relative; z-index: 2; transition: transform 200ms var(--ease); }
+.faqbot-toggle:hover .faqbot-toggle-icon { transform: rotate(-8deg); }
+.faqbot-toggle[aria-expanded="true"] .faqbot-toggle-icon { transform: rotate(90deg) scale(0.9); }
+
+/* Soft pulsing "someone's here" ring - quiets down once the panel is open. */
+.faqbot-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--signal);
+  opacity: 0.55;
+  animation: faqbot-pulse 2.6s ease-out infinite;
+  pointer-events: none;
+}
+.faqbot-toggle[aria-expanded="true"] .faqbot-ring { animation: none; opacity: 0; }
+
+@keyframes faqbot-pulse {
+  0%   { transform: scale(1);    opacity: 0.45; }
+  70%  { transform: scale(1.55); opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Tiny twinkling sparkles - purely decorative (aria-hidden). */
+.faqbot-sparkle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--white);
+  clip-path: polygon(50% 0%, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0% 50%, 39% 35%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  animation: faqbot-twinkle 2.8s ease-in-out infinite;
+}
+.faqbot-sparkle--1 { top: -0.15rem; right: -0.1rem; animation-delay: 0.3s; }
+.faqbot-sparkle--2 { bottom: 0.1rem; left: -0.2rem; width: 5px; height: 5px; animation-delay: 1.5s; }
+.faqbot-toggle[aria-expanded="true"] .faqbot-sparkle { animation: none; opacity: 0; }
+
+@keyframes faqbot-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+  50%      { opacity: 1; transform: scale(1) rotate(25deg); }
+}
+
+/* Hover tooltip - the button stays a small, cute circle by default and
+   only spells itself out on hover/focus. */
+.faqbot-tooltip {
+  position: absolute;
+  right: calc(100% + 0.6rem);
+  top: 50%;
+  transform: translateY(-50%) translateX(4px);
+  background: var(--ink);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms var(--ease), transform 160ms var(--ease);
+}
+.faqbot-toggle:hover .faqbot-tooltip,
+.faqbot-toggle:focus-visible .faqbot-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+.faqbot-toggle[aria-expanded="true"] .faqbot-tooltip { display: none; }
+
+/* Bug fix: an author-stylesheet class always wins over the browser's
+   default [hidden] rule at equal specificity, so without this the
+   panel showed on every page load regardless of the `hidden`
+   attribute. This restores hidden -> actually hidden. */
+.faqbot-panel[hidden] { display: none; }
+
+.faqbot-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.75rem);
+  width: min(19rem, 88vw);
+  max-height: 24rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(10px) scale(0.97);
+  transform-origin: bottom right;
+  transition: opacity 160ms var(--ease), transform 160ms var(--ease);
+}
+
+.faqbot-panel.is-open { opacity: 1; transform: translateY(0) scale(1); }
+
+.faqbot-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--ink);
+  color: var(--white);
+  padding: 0.85rem 0.9rem;
+}
+
+.faqbot-panel-head img { flex: none; border-radius: 6px; background: var(--signal); padding: 2px; }
+.faqbot-panel-title { flex: 1; min-width: 0; }
+.faqbot-panel-title h2 { margin: 0; font-size: 0.95rem; color: var(--white); }
+.faqbot-panel-title p { margin: 0.1rem 0 0; font-size: 0.74rem; color: rgba(255, 255, 255, 0.65); }
+
+.faqbot-close {
+  flex: none;
+  border: none;
+  background: none;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+.faqbot-close:hover { color: var(--white); background: rgba(255, 255, 255, 0.12); }
+
+.faqbot-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 0.75rem 0.85rem;
+  background: var(--paper);
+}
+
+.faqbot-body .hint { margin: 0 0 0.6rem; font-size: 0.78rem; }
+
+.faqbot-log {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 0.6rem;
+  padding-right: 0.15rem;
+}
+
+.faqbot-msg {
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  line-height: 1.35;
+  max-width: 88%;
+}
+
+.faqbot-msg--user {
+  background: var(--ink);
+  color: var(--white);
+  margin-left: auto;
+  border-bottom-right-radius: 3px;
+}
+.faqbot-msg--bot {
+  background: var(--white);
+  border: var(--hairline);
+  margin-right: auto;
+  border-bottom-left-radius: 3px;
+}
+.faqbot-msg--bot strong { color: var(--lane); }
+.faqbot-msg a { color: var(--lane); }
+.faqbot-msg--user a { color: var(--signal); }
+
+.faqbot-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+}
+
+.faqbot-chips button {
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  border: 1px solid rgba(12, 42, 47, 0.18);
+  background: var(--white);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  transition: background 120ms var(--ease), border-color 120ms var(--ease);
+}
+.faqbot-chips button:hover { background: var(--signal); border-color: var(--signal); }
+
+.faqbot-form { display: flex; gap: 0.4rem; }
+
+.faqbot-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(12, 42, 47, 0.18);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.86rem;
+  background: var(--white);
+}
+.faqbot-form input:focus-visible { outline: 3px solid var(--lane-bright); outline-offset: 1px; }
+
+.faqbot-send {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--signal);
+  color: var(--ink);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 120ms var(--ease);
+}
+.faqbot-send:hover { background: #ffd05c; }
+
+@media (max-width: 520px) {
+  .faqbot-panel { width: min(90vw, 19rem); max-height: 20rem; }
 }
