@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'profile
     // Phone and address are optional - only validate the phone format
     // once something has actually been entered.
     if ($profileData['phone'] !== '' && !is_valid_au_phone($profileData['phone'])) {
-        $profileErrors['phone'] = 'Use a 10-digit Australian number, for example 0412 345 678.';
+        $profileErrors['phone'] = 'Please enter a valid 10-digit Australian phone number, for example 0412 345 678.';
     }
     if (mb_strlen($profileData['address']) > 255) {
         $profileErrors['address'] = 'Keep the address under 255 characters.';
