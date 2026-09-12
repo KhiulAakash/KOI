@@ -1,4 +1,4 @@
-# Anchorline Logistics
+ # Anchorline Logistics
 
 A dynamic web application for a fictional Australian freight and logistics operator, built
 with PHP, MySQL, HTML5, CSS3 and vanilla JavaScript. Started as a static HTML site (ICT726
@@ -115,3 +115,14 @@ on `track.php`.
       localhost site directly — either deploy to a public PHP/MySQL host first, or save a
       rendered page and upload it).
 - [ ] Update `REPORT-DRAFT.md` for this assignment's report requirements.
+      
+    ## Recent Improvements
+
+The following improvements have recently been made to the Anchorline Logistics system:
+
+- Improved user account management functionality.
+- Added phone number and address fields to user profiles.
+- Added forgot-password and password reset functionality.
+- Improved database integration for storing user information.
+- Added a quick-answer chatbot to improve user support.
+- Improved the overall usability and navigation of the website.
