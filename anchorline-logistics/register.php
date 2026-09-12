@@ -86,17 +86,23 @@ require ROOT_PATH . '/includes/header.php';
             <div class="field<?php echo field_invalid($errors, 'password'); ?>">
               <label for="password">Password</label>
               <span class="hint" id="password-hint">At least 8 characters.</span>
-              <input type="password" id="password" name="password" autocomplete="new-password"
-                     minlength="8" required aria-describedby="password-hint password-error"
-                     data-error-tooshort="Use at least 8 characters."
-                     aria-invalid="<?php echo field_aria_invalid($errors, 'password'); ?>">
+              <div class="password-field">
+                <input type="password" id="password" name="password" autocomplete="new-password"
+                       minlength="8" required aria-describedby="password-hint password-error"
+                       data-error-tooshort="Use at least 8 characters."
+                       aria-invalid="<?php echo field_aria_invalid($errors, 'password'); ?>">
+                <?php echo password_toggle_button('password'); ?>
+              </div>
               <span class="error" id="password-error" aria-live="polite"><?php echo field_error($errors, 'password'); ?></span>
             </div>
             <div class="field<?php echo field_invalid($errors, 'confirm'); ?>">
               <label for="confirm">Confirm password</label>
-              <input type="password" id="confirm" name="confirm" autocomplete="new-password"
-                     minlength="8" required aria-describedby="confirm-error"
-                     aria-invalid="<?php echo field_aria_invalid($errors, 'confirm'); ?>">
+              <div class="password-field">
+                <input type="password" id="confirm" name="confirm" autocomplete="new-password"
+                       minlength="8" required aria-describedby="confirm-error"
+                       aria-invalid="<?php echo field_aria_invalid($errors, 'confirm'); ?>">
+                <?php echo password_toggle_button('confirm'); ?>
+              </div>
               <span class="error" id="confirm-error" aria-live="polite"><?php echo field_error($errors, 'confirm'); ?></span>
             </div>
           </fieldset>
