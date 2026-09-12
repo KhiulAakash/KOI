@@ -8,9 +8,17 @@ $robots = 'noindex, nofollow';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
+    $action = $_POST['action'] ?? 'update_status';
     $id = (int) ($_POST['id'] ?? 0);
-    $status = $_POST['status'] ?? '';
 
+    if ($action === 'delete') {
+        $stmt = $pdo->prepare('DELETE FROM enquiries WHERE id = ?');
+        $stmt->execute([$id]);
+        flash_set('ok', 'Enquiry #' . $id . ' deleted.');
+        redirect(BASE_URL . '/admin/enquiries.php');
+    }
+
+    $status = $_POST['status'] ?? '';
     if (array_key_exists($status, ENQUIRY_STATUS_LABELS)) {
         $stmt = $pdo->prepare('UPDATE enquiries SET status = ? WHERE id = ?');
         $stmt->execute([$status, $id]);
@@ -19,7 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect(BASE_URL . '/admin/enquiries.php');
 }
 
-$enquiries = $pdo->query('SELECT * FROM enquiries ORDER BY created_at DESC')->fetchAll();
+// Optional search: filters by name, email or message text. Bound LIKE
+// parameter, same safe pattern used on the other admin list pages.
+$search = trim($_GET['q'] ?? '');
+if ($search !== '') {
+    $like = '%' . $search . '%';
+    $stmt = $pdo->prepare(
+        'SELECT * FROM enquiries WHERE full_name LIKE ? OR email LIKE ? OR message LIKE ? ORDER BY created_at DESC'
+    );
+    $stmt->execute([$like, $like, $like]);
+    $enquiries = $stmt->fetchAll();
+} else {
+    $enquiries = $pdo->query('SELECT * FROM enquiries ORDER BY created_at DESC')->fetchAll();
+}
 
 require ROOT_PATH . '/includes/header.php';
 ?>
@@ -33,13 +53,25 @@ require ROOT_PATH . '/includes/header.php';
 
     <section class="section">
       <div class="wrap">
+        <form class="form-row" method="get" action="<?php echo e(BASE_URL); ?>/admin/enquiries.php" style="align-items: flex-end;">
+          <div class="field" style="margin-bottom: 0; flex: 1;">
+            <label for="q">Search</label>
+            <input type="text" id="q" name="q" value="<?php echo e($search); ?>" placeholder="Name, email or message">
+          </div>
+          <div class="btn-row" style="margin-bottom: 0.5rem;">
+            <button class="btn btn--primary btn--sm" type="submit">Search</button>
+            <?php if ($search !== ''): ?>
+            <a class="btn btn--ghost btn--sm" href="<?php echo e(BASE_URL); ?>/admin/enquiries.php">Clear</a>
+            <?php endif; ?>
+          </div>
+        </form>
         <div class="table-scroll">
           <table class="manifest">
-            <caption><?php echo count($enquiries); ?> enquiries</caption>
+            <caption><?php echo count($enquiries); ?> enquir<?php echo count($enquiries) === 1 ? 'y' : 'ies'; ?><?php echo $search !== '' ? ' matching "' . e($search) . '"' : ''; ?></caption>
             <thead>
               <tr>
                 <th scope="col">Date</th><th scope="col">Name</th><th scope="col">Contact</th>
-                <th scope="col">Service</th><th scope="col">Message</th><th scope="col">Status</th><th scope="col">Update</th>
+                <th scope="col">Service</th><th scope="col">Message</th><th scope="col">Status</th><th scope="col">Update</th><th scope="col">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -54,6 +86,7 @@ require ROOT_PATH . '/includes/header.php';
                 <td>
                   <form method="post" action="<?php echo e(BASE_URL); ?>/admin/enquiries.php" class="actions">
                     <?php echo csrf_field(); ?>
+                    <input type="hidden" name="action" value="update_status">
                     <input type="hidden" name="id" value="<?php echo (int) $enq['id']; ?>">
                     <label class="sr-only" for="status-<?php echo (int) $enq['id']; ?>">Status for enquiry <?php echo (int) $enq['id']; ?></label>
                     <select id="status-<?php echo (int) $enq['id']; ?>" name="status">
@@ -64,10 +97,18 @@ require ROOT_PATH . '/includes/header.php';
                     <button class="btn btn--primary btn--sm" type="submit">Save</button>
                   </form>
                 </td>
+                <td>
+                  <form method="post" action="<?php echo e(BASE_URL); ?>/admin/enquiries.php" onsubmit="return confirm('Delete this enquiry? This cannot be undone.');">
+                    <?php echo csrf_field(); ?>
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="id" value="<?php echo (int) $enq['id']; ?>">
+                    <button class="btn btn--danger btn--sm" type="submit">Delete</button>
+                  </form>
+                </td>
               </tr>
               <?php endforeach; ?>
               <?php if (!$enquiries): ?>
-              <tr><td colspan="7">No enquiries yet.</td></tr>
+              <tr><td colspan="8">No enquiries<?php echo $search !== '' ? ' match that search.' : ' yet.'; ?></td></tr>
               <?php endif; ?>
             </tbody>
           </table>

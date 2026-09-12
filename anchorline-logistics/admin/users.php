@@ -24,7 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$users = $pdo->query('SELECT * FROM users ORDER BY created_at DESC')->fetchAll();
+// Optional search: filters by name or email. Bound LIKE parameter, same
+// safe pattern used on the other admin list pages.
+$search = trim($_GET['q'] ?? '');
+if ($search !== '') {
+    $like = '%' . $search . '%';
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE name LIKE ? OR email LIKE ? ORDER BY created_at DESC');
+    $stmt->execute([$like, $like]);
+    $users = $stmt->fetchAll();
+} else {
+    $users = $pdo->query('SELECT * FROM users ORDER BY created_at DESC')->fetchAll();
+}
 
 require ROOT_PATH . '/includes/header.php';
 ?>
@@ -41,13 +51,28 @@ require ROOT_PATH . '/includes/header.php';
         <?php if ($notice): ?>
         <p class="feedback feedback--error" role="alert"><?php echo e($notice); ?></p>
         <?php endif; ?>
+        <form class="form-row" method="get" action="<?php echo e(BASE_URL); ?>/admin/users.php" style="align-items: flex-end;">
+          <div class="field" style="margin-bottom: 0; flex: 1;">
+            <label for="q">Search</label>
+            <input type="text" id="q" name="q" value="<?php echo e($search); ?>" placeholder="Name or email">
+          </div>
+          <div class="btn-row" style="margin-bottom: 0.5rem;">
+            <button class="btn btn--primary btn--sm" type="submit">Search</button>
+            <?php if ($search !== ''): ?>
+            <a class="btn btn--ghost btn--sm" href="<?php echo e(BASE_URL); ?>/admin/users.php">Clear</a>
+            <?php endif; ?>
+          </div>
+        </form>
         <div class="table-scroll">
           <table class="manifest">
-            <caption><?php echo count($users); ?> users</caption>
+            <caption><?php echo count($users); ?> user<?php echo count($users) === 1 ? '' : 's'; ?><?php echo $search !== '' ? ' matching "' . e($search) . '"' : ''; ?></caption>
             <thead>
               <tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Joined</th><th scope="col">Role</th><th scope="col">Change role</th></tr>
             </thead>
             <tbody>
+              <?php if (!$users): ?>
+              <tr><td colspan="5">No users<?php echo $search !== '' ? ' match that search.' : '.'; ?></td></tr>
+              <?php endif; ?>
               <?php foreach ($users as $u): ?>
               <tr>
                 <td><?php echo e($u['name']); ?></td>

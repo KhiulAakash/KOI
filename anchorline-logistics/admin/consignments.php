@@ -92,7 +92,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$consignments = $pdo->query('SELECT * FROM consignments ORDER BY updated_at DESC')->fetchAll();
+// Optional search: filters by waybill, sender or receiver. Uses a bound
+// LIKE parameter (never string-concatenated SQL) so it is just as safe as
+// every other query on this page.
+$search = trim($_GET['q'] ?? '');
+if ($search !== '') {
+    $like = '%' . $search . '%';
+    $stmt = $pdo->prepare(
+        'SELECT * FROM consignments WHERE waybill LIKE ? OR sender_name LIKE ? OR receiver_name LIKE ? ORDER BY updated_at DESC'
+    );
+    $stmt->execute([$like, $like, $like]);
+    $consignments = $stmt->fetchAll();
+} else {
+    $consignments = $pdo->query('SELECT * FROM consignments ORDER BY updated_at DESC')->fetchAll();
+}
 
 require ROOT_PATH . '/includes/header.php';
 ?>
@@ -183,9 +196,21 @@ require ROOT_PATH . '/includes/header.php';
 
         <div class="dashboard-card mt-4">
           <h2>All consignments</h2>
+          <form class="form-row" method="get" action="<?php echo e(BASE_URL); ?>/admin/consignments.php" style="align-items: flex-end;">
+            <div class="field" style="margin-bottom: 0; flex: 1;">
+              <label for="q">Search</label>
+              <input type="text" id="q" name="q" value="<?php echo e($search); ?>" placeholder="Waybill, sender or receiver">
+            </div>
+            <div class="btn-row" style="margin-bottom: 0.5rem;">
+              <button class="btn btn--primary btn--sm" type="submit">Search</button>
+              <?php if ($search !== ''): ?>
+              <a class="btn btn--ghost btn--sm" href="<?php echo e(BASE_URL); ?>/admin/consignments.php">Clear</a>
+              <?php endif; ?>
+            </div>
+          </form>
           <div class="table-scroll">
             <table class="manifest">
-              <caption><?php echo count($consignments); ?> consignments</caption>
+              <caption><?php echo count($consignments); ?> consignment<?php echo count($consignments) === 1 ? '' : 's'; ?><?php echo $search !== '' ? ' matching "' . e($search) . '"' : ''; ?></caption>
               <thead>
                 <tr><th scope="col">Waybill</th><th scope="col">Route</th><th scope="col">Service</th><th scope="col">Status</th><th scope="col">Actions</th></tr>
               </thead>
