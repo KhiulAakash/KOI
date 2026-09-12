@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form'] ?? '') === 'profile
     // Phone and address are optional - only validate the phone format
     // once something has actually been entered.
     if ($profileData['phone'] !== '' && !is_valid_au_phone($profileData['phone'])) {
-        $profileErrors['phone'] = 'Please enter a valid 10-digit Australian phone number, for example 0412 345 678.';
+        $profileErrors['phone'] = 'Use a 10-digit Australian number, for example 0412 345 678.';
     }
     if (mb_strlen($profileData['address']) > 255) {
         $profileErrors['address'] = 'Keep the address under 255 characters.';
@@ -165,25 +165,34 @@ require ROOT_PATH . '/includes/header.php';
               <legend class="sr-only">Change password</legend>
               <div class="field<?php echo field_invalid($passwordErrors, 'current_password'); ?>">
                 <label for="current_password">Current password</label>
-                <input type="password" id="current_password" name="current_password" autocomplete="current-password"
-                       required aria-describedby="current_password-error"
-                       aria-invalid="<?php echo field_aria_invalid($passwordErrors, 'current_password'); ?>">
+                <div class="password-field">
+                  <input type="password" id="current_password" name="current_password" autocomplete="current-password"
+                         required aria-describedby="current_password-error"
+                         aria-invalid="<?php echo field_aria_invalid($passwordErrors, 'current_password'); ?>">
+                  <?php echo password_toggle_button('current_password'); ?>
+                </div>
                 <span class="error" id="current_password-error" aria-live="polite"><?php echo field_error($passwordErrors, 'current_password'); ?></span>
               </div>
               <div class="field<?php echo field_invalid($passwordErrors, 'password'); ?>">
                 <label for="password">New password</label>
                 <span class="hint" id="password-hint">At least 8 characters.</span>
-                <input type="password" id="password" name="password" autocomplete="new-password"
-                       minlength="8" required aria-describedby="password-hint password-error"
-                       data-error-tooshort="Use at least 8 characters."
-                       aria-invalid="<?php echo field_aria_invalid($passwordErrors, 'password'); ?>">
+                <div class="password-field">
+                  <input type="password" id="password" name="password" autocomplete="new-password"
+                         minlength="8" required aria-describedby="password-hint password-error"
+                         data-error-tooshort="Use at least 8 characters."
+                         aria-invalid="<?php echo field_aria_invalid($passwordErrors, 'password'); ?>">
+                  <?php echo password_toggle_button('password'); ?>
+                </div>
                 <span class="error" id="password-error" aria-live="polite"><?php echo field_error($passwordErrors, 'password'); ?></span>
               </div>
               <div class="field<?php echo field_invalid($passwordErrors, 'confirm'); ?>">
                 <label for="confirm">Confirm new password</label>
-                <input type="password" id="confirm" name="confirm" autocomplete="new-password"
-                       minlength="8" required aria-describedby="confirm-error"
-                       aria-invalid="<?php echo field_aria_invalid($passwordErrors, 'confirm'); ?>">
+                <div class="password-field">
+                  <input type="password" id="confirm" name="confirm" autocomplete="new-password"
+                         minlength="8" required aria-describedby="confirm-error"
+                         aria-invalid="<?php echo field_aria_invalid($passwordErrors, 'confirm'); ?>">
+                  <?php echo password_toggle_button('confirm'); ?>
+                </div>
                 <span class="error" id="confirm-error" aria-live="polite"><?php echo field_error($passwordErrors, 'confirm'); ?></span>
               </div>
             </fieldset>

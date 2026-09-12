@@ -46,6 +46,22 @@ function label_for($map, $key)
     return $map[$key] ?? $key;
 }
 
+/**
+ * Renders the eye-icon button that reveals/hides a password field.
+ * $targetId must match the <input>'s id - js/main.js finds the button
+ * by its data-target and toggles that input's type. Progressive
+ * enhancement: with JavaScript off the button just doesn't render as
+ * clickable-looking and the password field works exactly as before.
+ */
+function password_toggle_button($targetId)
+{
+    return '<button type="button" class="password-toggle" data-target="' . e($targetId) . '" aria-pressed="false">'
+        . '<svg class="icon-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+        . '<svg class="icon-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a21.7 21.7 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>'
+        . '<span class="sr-only">Show password</span>'
+        . '</button>';
+}
+
 /* Small helpers for re-rendering a form with server-side validation errors. */
 function field_invalid($errors, $key)
 {

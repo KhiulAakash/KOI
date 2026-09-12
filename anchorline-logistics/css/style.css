@@ -1179,3 +1179,38 @@ table.manifest {
   .faqbot-panel { width: min(90vw, 19rem); max-height: 22rem; }
   .faqbot-log { min-height: 6rem; }
 }
+
+/* -------------------------------------------------------------
+   15. PASSWORD VISIBILITY TOGGLE
+   ------------------------------------------------------------- */
+.password-field { position: relative; }
+.password-field input { padding-right: 2.75rem; }
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: none;
+  background: transparent;
+  color: var(--steel);
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: background 120ms var(--ease), color 120ms var(--ease);
+}
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  color: var(--ink);
+  background: rgba(12, 42, 47, 0.08);
+}
+.password-toggle svg { width: 1.15rem; height: 1.15rem; }
+/* Only one of the two eye icons shows at a time, flipped by the
+   aria-pressed state that js/main.js keeps in sync with the field's
+   actual visibility - so the icon still matches reality even for a
+   screen reader user who only reads the pressed state. */
+.password-toggle .icon-hide { display: none; }
+.password-toggle[aria-pressed="true"] .icon-show { display: none; }
+.password-toggle[aria-pressed="true"] .icon-hide { display: block; }

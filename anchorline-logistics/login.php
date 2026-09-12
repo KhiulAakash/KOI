@@ -64,8 +64,11 @@ require ROOT_PATH . '/includes/header.php';
             </div>
             <div class="field">
               <label for="password">Password</label>
-              <input type="password" id="password" name="password" autocomplete="current-password"
-                     required aria-describedby="password-error">
+              <div class="password-field">
+                <input type="password" id="password" name="password" autocomplete="current-password"
+                       required aria-describedby="password-error">
+                <?php echo password_toggle_button('password'); ?>
+              </div>
               <span class="error" id="password-error" aria-live="polite"></span>
             </div>
           </fieldset>

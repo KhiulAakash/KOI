@@ -216,11 +216,31 @@
     if (el) el.textContent = new Date().getFullYear();
   }
 
+  /* -----------------------------------------------------------
+     6. PASSWORD VISIBILITY TOGGLE
+     ----------------------------------------------------------- */
+  function initPasswordToggles() {
+    var toggles = document.querySelectorAll(".password-toggle");
+    toggles.forEach(function (btn) {
+      var input = document.getElementById(btn.getAttribute("data-target"));
+      var label = btn.querySelector(".sr-only");
+      if (!input) return;
+
+      btn.addEventListener("click", function () {
+        var showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        btn.setAttribute("aria-pressed", String(!showing));
+        if (label) label.textContent = showing ? "Show password" : "Hide password";
+      });
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initNav();
     initLightbox();
     initTracker();
     initValidatedForms();
     initYear();
+    initPasswordToggles();
   });
 })();
