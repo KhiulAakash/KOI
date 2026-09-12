@@ -5,6 +5,9 @@ Disallow: /member/
 Disallow: /dashboard.php
 Disallow: /login.php
 Disallow: /register.php
+Disallow: /account.php
+Disallow: /forgot-password.php
+Disallow: /reset-password.php
 Disallow: /includes/
 Disallow: /sql/
 

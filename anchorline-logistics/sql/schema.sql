@@ -16,12 +16,20 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- users
 -- -----------------------------------------------------------------
 CREATE TABLE users (
-    id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name          VARCHAR(100)  NOT NULL,
-    email         VARCHAR(190)  NOT NULL UNIQUE,
-    password_hash VARCHAR(255)  NOT NULL,
-    role          ENUM('admin', 'member', 'normal') NOT NULL DEFAULT 'normal',
-    created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id                INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name              VARCHAR(100)  NOT NULL,
+    email             VARCHAR(190)  NOT NULL UNIQUE,
+    password_hash     VARCHAR(255)  NOT NULL,
+    role              ENUM('admin', 'member', 'normal') NOT NULL DEFAULT 'normal',
+    -- Optional contact details a user can add on the "My account" page.
+    phone             VARCHAR(20)   NULL DEFAULT NULL,
+    address           VARCHAR(255)  NULL DEFAULT NULL,
+    -- Forgot-password support: a hashed, single-use, time-limited token.
+    -- The raw token only ever exists in the emailed/displayed reset link,
+    -- never in the database - only its SHA-256 hash is stored here.
+    reset_token_hash  VARCHAR(255)  NULL DEFAULT NULL,
+    reset_expires_at  DATETIME      NULL DEFAULT NULL,
+    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- -----------------------------------------------------------------
