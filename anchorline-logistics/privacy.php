@@ -21,7 +21,11 @@ require ROOT_PATH . '/includes/header.php';
         <h2 class="mt-4">What we collect</h2>
         <ul>
           <li><strong>Account details</strong> - name, email address and a securely hashed
-              password, when you register for an account.</li>
+              password, when you register for an account. You may also optionally add a
+              phone number and address in "My account" if you want them on file.</li>
+          <li><strong>Password reset requests</strong> - if you use "Forgot your password",
+              a single-use reset token is generated. Only its cryptographic hash is stored,
+              never the token itself, and it automatically expires after one hour.</li>
           <li><strong>Enquiry details</strong> - name, email, phone number, service of
               interest and your message, when you submit the contact form.</li>
           <li><strong>Session data</strong> - a temporary login session cookie, so you stay
@@ -57,8 +61,13 @@ require ROOT_PATH . '/includes/header.php';
         </ul>
 
         <h2 class="mt-4">Your choices</h2>
-        <p>You can ask for your account or enquiry data to be corrected or deleted at any
-           time via the <a href="<?php echo e(BASE_URL); ?>/contact.php">contact page</a>.
+        <p>If you have an account, you can view and correct your own name, email, phone
+           and address at any time in <a href="<?php echo e(BASE_URL); ?>/account.php">My
+           account</a>, and change your password there too. Forgotten your password
+           entirely? Use <a href="<?php echo e(BASE_URL); ?>/forgot-password.php">Forgot
+           your password</a> to reset it yourself, no need to contact anyone. For anything
+           else - including deleting your account or your enquiry data - you can reach us
+           via the <a href="<?php echo e(BASE_URL); ?>/contact.php">contact page</a>.
            Because this is a teaching environment, the database may be reset at any time
            without notice.</p>
       </div>
