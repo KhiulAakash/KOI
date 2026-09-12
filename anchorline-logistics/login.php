@@ -70,7 +70,8 @@ require ROOT_PATH . '/includes/header.php';
             </div>
           </fieldset>
           <button class="btn btn--primary" type="submit">Log in</button>
-          <p class="hint mt-2">No account yet? <a href="<?php echo e(BASE_URL); ?>/register.php">Register</a>.</p>
+          <p class="hint mt-2"><a href="<?php echo e(BASE_URL); ?>/forgot-password.php">Forgot your password?</a></p>
+          <p class="hint">No account yet? <a href="<?php echo e(BASE_URL); ?>/register.php">Register</a>.</p>
           <p class="hint">Demo accounts: <code>admin@anchorline.example</code> / <code>Admin@12345</code>
              (admin) and <code>member@anchorline.example</code> / <code>Member@12345</code> (member).</p>
         </form>

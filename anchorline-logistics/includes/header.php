@@ -63,6 +63,7 @@ $nav_links = [
           <?php endforeach; ?>
           <?php if ($user): ?>
           <li class="nav-auth-item"><a href="<?php echo e(BASE_URL); ?>/dashboard.php"<?php echo $current === 'dashboard.php' ? ' aria-current="page"' : ''; ?>><?php echo e($user['name']); ?> &middot; Dashboard</a></li>
+          <li><a href="<?php echo e(BASE_URL); ?>/account.php"<?php echo $current === 'account.php' ? ' aria-current="page"' : ''; ?>>My account</a></li>
           <?php if ($user['role'] === 'admin'): ?>
           <li><a href="<?php echo e(BASE_URL); ?>/admin/consignments.php">Admin</a></li>
           <?php endif; ?>
