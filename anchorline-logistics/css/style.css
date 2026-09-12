@@ -1080,12 +1080,21 @@ table.manifest {
   min-height: 0;
   padding: 0.75rem 0.85rem;
   background: var(--paper);
+  /* Safety net: if the header + hint + chips + log ever add up to more
+     than the panel's max-height, the whole body scrolls instead of
+     silently clipping the input box out of reach. */
+  overflow-y: auto;
 }
 
 .faqbot-body .hint { margin: 0 0 0.6rem; font-size: 0.78rem; }
 
 .faqbot-log {
   flex: 1;
+  /* A flex item with overflow set to anything but "visible" loses its
+     normal content-based minimum size, so with no fixed height above
+     it this would otherwise collapse toward 0px even while holding
+     real messages - min-height keeps it visibly open. */
+  min-height: 8rem;
   overflow-y: auto;
   margin-bottom: 0.6rem;
   padding-right: 0.15rem;
@@ -1167,5 +1176,6 @@ table.manifest {
 .faqbot-send:hover { background: #ffd05c; }
 
 @media (max-width: 520px) {
-  .faqbot-panel { width: min(90vw, 19rem); max-height: 20rem; }
+  .faqbot-panel { width: min(90vw, 19rem); max-height: 22rem; }
+  .faqbot-log { min-height: 6rem; }
 }
