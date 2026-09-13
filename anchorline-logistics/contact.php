@@ -63,6 +63,7 @@ require ROOT_PATH . '/includes/header.php';
         <p class="eyebrow">Anchorline Logistics</p>
         <h1>Contact</h1>
         <p>Talk to the operations desk, or send the details of a lane and we will price it.</p>
+          <p>Our team is here to help with shipment enquiries, delivery updates and general support.</p>
       </div>
     </section>
 
