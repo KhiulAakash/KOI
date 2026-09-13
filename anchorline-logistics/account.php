@@ -109,6 +109,7 @@ require ROOT_PATH . '/includes/header.php';
 
         <div class="dashboard-card">
           <h2>Your details</h2>
+            <p><strong>Account Status:</strong> Active</p>
           <p class="feedback feedback--error" id="profile-form-feedback" role="status" tabindex="-1"<?php echo $profileErrors ? '' : ' hidden'; ?>>Check the highlighted fields and try again.</p>
           <form class="form" id="profile-form" method="post" action="<?php echo e(BASE_URL); ?>/account.php" data-validate novalidate>
             <?php echo csrf_field(); ?>
