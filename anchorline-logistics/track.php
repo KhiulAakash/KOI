@@ -34,7 +34,7 @@ require ROOT_PATH . '/includes/header.php';
       <div class="wrap">
         <p class="eyebrow">Anchorline Logistics</p>
         <h1>Track a shipment</h1>
-        <p>Enter a waybill number to see where a consignment is and every scan behind it.</p>
+       <p>Enter your waybill number below to check the latest shipment status.</p>
       </div>
     </section>
 
